@@ -50,10 +50,7 @@ void PhoneBook()
 
       if (addressChar == 'y' || addressChar == 'Y')
       {
-        for (int i = 0; i < ADDR_HOST_ENTRIES; i++)
-        {
-          updateEEPROMPhoneBook(ADDR_HOSTS + (i * ADDR_HOST_SIZE), "\0");
-        }
+		  ClearPhoneBook();
       }
     }
     else if (addressChar == 'a' || addressChar == 'A')
@@ -115,6 +112,14 @@ void DisplayPhoneBook()
   C64.print(F("Autostart: "));
   C64.print(EEPROM.read(ADDR_HOST_AUTO));
   C64.println();
+}
+
+void ClearPhoneBook()
+{
+	for (int i = 0; i < ADDR_HOST_ENTRIES; i++)
+	{
+		updateEEPROMPhoneBook(ADDR_HOSTS + (i * ADDR_HOST_SIZE), "\0");
+	}
 }
 
 void removeSpaces(char *temp)

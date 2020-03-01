@@ -111,6 +111,7 @@ typedef long __PTRDIFF_TYPE__;
 #include "ESP32Modem.ino"
 #include "Ansi.ino"
 #include "BaudRate.ino"
+#include "Defaults.ino"
 #include "EEPROM.ino"
 #include "Hayes.ino"
 #include "Incoming.ino"

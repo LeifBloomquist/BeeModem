@@ -18,6 +18,9 @@
 #define ADDR_MODEM_SUP_ERRORS   19
 #define ADDR_MODEM_DSR          20
 
+#define EEPROM_INITIALIZED      0x42
+#define ADDR_INITIALIZED        98     // Has EEPROM been initialized? 
+
 #define ADDR_HOST_AUTO          99     // Autostart host number
 #define ADDR_HOSTS              100    // to 460 with ADDR_HOST_SIZE = 40 and ADDR_HOST_ENTRIES = 9
 #define STATIC_PB_ENTRIES       2

@@ -1,5 +1,27 @@
 #include "ADDR_EEPROM.h"
 
+// TODO, switch this all over to ESP32 Preferences
+
+void restoreEEPROMSettings()
+{
+	EEPROM.begin(4096);
+
+	int init = EEPROM.read(ADDR_INITIALIZED);
+
+	if (init != EEPROM_INITIALIZED)
+	{
+		DisplayBoth("*** EEPROM Not Initialized ***");
+		delay(5000);
+		DoSetDefaults();  // Reboots
+	}	
+
+	mode_petscii = EEPROM.read(ADDR_PETSCII);	
+	mode_Hayes = EEPROM.read(ADDR_HAYES_MENU);
+	BAUD_RATE = readEEPROMInteger(ADDR_BAUD_LO);
+
+	Debug.println(F("\nDEBUG: EPROM Settings Restored"));
+}
+
 void updateEEPROMByte(int address, byte value)
 {
   if (EEPROM.read(address) != value)

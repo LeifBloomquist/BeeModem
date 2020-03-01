@@ -9,7 +9,7 @@ void DoTelnet()
 
 	if (!wifi_connected)
 	{
-		C64.print(F("*** Not connected to Wi-Fi"));
+		C64.println(F("*** Not connected to Wi-Fi ***\n"));
 		return;
 	}
 

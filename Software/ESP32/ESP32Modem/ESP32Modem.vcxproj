@@ -80,6 +80,9 @@
     <None Include="BaudRate.ino">
       <FileType>CppCode</FileType>
     </None>
+    <None Include="Defaults.ino">
+      <FileType>CppCode</FileType>
+    </None>
     <None Include="EEPROM.ino" />
     <None Include="Hayes.ino" />
     <None Include="Incoming.ino" />
@@ -94,10 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ADDR_EEPROM.h" />
+    <ClInclude Include="PhoneBook.h" />
     <ClInclude Include="Telnet.h" />
-    <ClInclude Include="__vm\.ESP32.vsarduino.h" />
     <ClInclude Include="__vm\.ESP32Modem.vsarduino.h" />
-    <ClInclude Include="__vm\.WifiTerminal.vsarduino.h" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>

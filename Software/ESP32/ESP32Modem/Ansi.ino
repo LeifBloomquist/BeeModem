@@ -1,4 +1,3 @@
-
 #define ESC  27
 
 void AnsiClearScreen(Stream& terminal)

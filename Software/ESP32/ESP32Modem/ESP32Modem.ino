@@ -57,7 +57,7 @@ unsigned int BAUD_RATE = DEFAULT_BAUD_RATE;
 
 // WiFi network name and password:
 const char * networkName = "L0ndonGreen2";
-const char * networkPswd = "establ1shmentzz";
+const char * networkPswd = "establ1shment";
 
 //Are we currently connected to Wi-Fi?
 boolean wifi_connected = false;
@@ -65,24 +65,26 @@ boolean wifi_connected = false;
 String lastHost = "";
 int lastPort = TELNET_DEFAULT_PORT;
 
-int mode_Hayes = 1;    // 0 = Menu, 1 = Hayes
+int mode_Hayes = 0;    // 0 = Menu, 1 = Hayes
+boolean mode_petscii = 0;    // 0 = Menu, 1 = Hayes   Always use ASCII for Hayes.  To set SSID, user must use ASCII mode.
 
 void setup() 
 {
-	// Debug Serial
+	// 1. Debug Serial
 	Debug.begin(115200);
-	Debug.println("DEBUG: Wi-Fi Modem Initializing");
+	Debug.println(F("\nDEBUG: Wi-Fi Modem Initializing"));
 
-	// C64 Serial
-	C64.begin(BAUD_RATE, SERIAL_8N1, PIN_C64_RX, PIN_C64_TX);
-	C64.println("Wi-Fi Modem Initializing");
-
-	// OLED
+	// 2. OLED
 	OLED_Init();
 
-	// TODO EPROM
+	// 3. EEPROM
+	restoreEEPROMSettings();
+
+	// 4. C64 Serial
+	C64.begin(BAUD_RATE, SERIAL_8N1, PIN_C64_RX, PIN_C64_TX);
+	C64.println(F("\nWi-Fi Modem Initializing"));
 	
-	// Wi-Fi
+	// 5. Wi-Fi
 	ConnectToWiFi(networkName, networkPswd);
 
 	int timeout = 0;
@@ -91,7 +93,7 @@ void setup()
 		delay(1);
 		if (timeout++ > 5000)
 		{
-			C64.println("\n\n*** Failed to connect to Wi-Fi! ***\n");
+			C64.println(F("\n\n*** Failed to connect to Wi-Fi! ***\n"));
 			break;
 		}
 	}
@@ -99,7 +101,8 @@ void setup()
 
 	ShowInfo();
 	ShowConfiguration();
-	Debug.println("DEBUG: Initialization Complete");
+
+	Debug.println(F("DEBUG: Initialization Complete"));
 }
 
 void loop() 
@@ -124,8 +127,6 @@ void loop()
 
 void ShowMenu()
 {
-	DisplayString("READY.");
-
 	C64.print(F("\r\nCommodore Wi-Fi Modem\r\n\r\n"
 		"1. Telnet to Host\r\n"
 		"2. Phone Book\r\n"
@@ -134,6 +135,8 @@ void ShowMenu()
 		"5. Hayes Emulation Mode \r\n"
 		"\r\n"
 		"Select: "));
+
+	DisplayString("READY.");
 
 	int option = ReadByte(C64);
 	C64.println((char)option);   // Echo back
@@ -176,14 +179,14 @@ void Configuration()
 	while (true)
 	{
 		char temp[30];
-		C64.print
-		(F("\r\n"
+		C64.print(F("\r\n"
 			"Configuration Menu\r\n"
 			"\r\n"
 			"1. Display Current Configuration\r\n"
 			"2. Change SSID\r\n"
 			"3. Change Baud Rate\r\n"
-			"4. Return to Main Menu\r\n"
+			"4. Set Factory Defaults\r\n"
+			"5. Return to Main Menu\r\n"
 			"\r\nSelect: "));
 
 		int option = ReadByte(C64);
@@ -203,7 +206,11 @@ void Configuration()
 				ChangeBaudRate();
 				break;
 
-			case '4': 
+			case '4':
+				SetDefaults();
+				break;
+
+			case '5': 
 				return;
 
 			case '\n':
@@ -320,9 +327,11 @@ void WiFiEvent(WiFiEvent_t event)
 		case SYSTEM_EVENT_STA_GOT_IP:
 			//When connected set 
 			wifi_connected = true;
+			C64.println(F("\n*** Connected to Wi-Fi ***\n"));
 			break;
 		case SYSTEM_EVENT_STA_DISCONNECTED:
 			wifi_connected = false;
+			C64.println(F("\n*** Disconnected from Wi-Fi ***\n"));
 			break;
 		default: break;
 	}

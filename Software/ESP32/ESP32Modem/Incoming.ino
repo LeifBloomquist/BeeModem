@@ -3,9 +3,17 @@
 
 void Incoming()
 {
+	C64.println();
+
+	if (!wifi_connected)
+	{
+		C64.println(F("*** Not connected to Wi-Fi ***\n"));
+		return;
+	}
+
     unsigned int WiFiLocalPort = readEEPROMInteger(ADDR_PORT_LO);
 
-    C64.print(F("\r\nIncoming port ("));
+    C64.print(F("Incoming port ("));
     C64.print(WiFiLocalPort);
     C64.print(F("): "));
 
@@ -13,9 +21,12 @@ void Incoming()
 
     if (strport.length() > 0)
     {
-        WiFiLocalPort = strport.toInt();       
+        WiFiLocalPort = strport.toInt();
+		if (WiFiLocalPort <= 0) return;
         updateEEPROMInteger(ADDR_PORT_LO, WiFiLocalPort);
     }
+	
+	if (WiFiLocalPort <= 0) return;
 
     // Start the server 
     WiFiServer wifi_server(WiFiLocalPort);    
