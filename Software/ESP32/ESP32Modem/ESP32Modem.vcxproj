@@ -97,9 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ADDR_EEPROM.h" />
-    <ClInclude Include="PhoneBook.h" />
     <ClInclude Include="Telnet.h" />
-    <ClInclude Include="__vm\.ESP32Modem.vsarduino.h" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
