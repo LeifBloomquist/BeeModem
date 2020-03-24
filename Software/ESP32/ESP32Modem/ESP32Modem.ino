@@ -88,7 +88,7 @@ void setup()
 	ConnectToWiFi(networkName, networkPswd);
 
 	int timeout = 0;
-	while (!wifi_connected)  // TODO, timeout
+	while (!wifi_connected) 
 	{
 		delay(1);
 		if (timeout++ > 5000)
