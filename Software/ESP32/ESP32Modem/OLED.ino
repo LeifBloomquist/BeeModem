@@ -2,6 +2,8 @@
 void OLED_Init() 
 {
 
+/*
+
 #ifdef TTGO
 	pinMode(PIN_OLED_RST, OUTPUT);
 	digitalWrite(PIN_OLED_RST, LOW); // low to reset OLED
@@ -26,14 +28,17 @@ void OLED_Init()
 	display.clearDisplay();
 	display.setTextSize(1);
 	display.setTextColor(WHITE);
+
+	*/
 }
 
 void DisplayString(const char* message)
 {
-	display.clearDisplay();
+/*	display.clearDisplay();
 	display.setCursor(0, 10);
 	display.println(message);
 	display.display();
+*/
 }
 
 void DisplayBoth(const char* s)

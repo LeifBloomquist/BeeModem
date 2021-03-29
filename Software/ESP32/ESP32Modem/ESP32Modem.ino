@@ -1,6 +1,6 @@
 /*
 C64 Wifi Terminal - WiFiModem ESP32
-Copyright 2015-2020 Leif Bloomquist and Alex Burger
+Copyright 2015-2021 Leif Bloomquist and Alex Burger
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2
@@ -15,41 +15,35 @@ as published by the Free Software Foundation.
 
 #include <SPI.h>
 #include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+//#include <Adafruit_GFX.h>
+//#include <Adafruit_SSD1306.h>
 
 #include <EEPROM.h>
 #include "Telnet.h"
 #include "ADDR_EEPROM.h"
 
-#define VERSION "ESP32 0.15"
+#define VERSION "ESP32 0.16"
 
 // Board type
 //#define WEMOS_LOLIN
 #define TTGO  
 
-// For Wemos Lolin32 ESP32 with built-in SSD1306 OLED
-#ifdef WEMOS_LOLIN
-#define PIN_OLED_SDA 5 
-#define PIN_OLED_SCL 4
-#endif
 
 //For ESP32 OLED V2.0 TTGO & for Arduino
 #ifdef TTGO
 #define PIN_OLED_SDA 4
 #define PIN_OLED_SCL 15
 #define PIN_OLED_RST 16 
-#define PIN_C64_RX   23   // Receive from C64
-#define PIN_C64_TX   19   // Transmit to C64
+#define PIN_C64_RX   22   // Receive from C64
+#define PIN_C64_TX   17   // Transmit to C64
 #endif
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+//Adafruit _SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 #define Debug Serial
-//#define C64 Serial1
 HardwareSerial C64(2);  // Serial1 for ESP32 
 
 #define DEFAULT_BAUD_RATE 2400
@@ -65,8 +59,8 @@ boolean wifi_connected = false;
 String lastHost = "";
 int lastPort = TELNET_DEFAULT_PORT;
 
-int mode_Hayes = 0;    // 0 = Menu, 1 = Hayes
-boolean mode_petscii = 0;    // 0 = Menu, 1 = Hayes   Always use ASCII for Hayes.  To set SSID, user must use ASCII mode.
+boolean mode_Hayes = 0;      // 0 = Menu,  1 = Hayes
+boolean mode_petscii = 0;    // 0 = ASCII, 1 = PETSCII   Always use ASCII for Hayes.  To set SSID, user must use ASCII mode.
 
 void setup() 
 {
@@ -99,19 +93,16 @@ void setup()
 	}
 	delay(100);
 
+	// 6. Show config
 	ShowInfo();
 	ShowConfiguration();
 
+	// 7. Ready!
 	Debug.println(F("DEBUG: Initialization Complete"));
 }
 
 void loop() 
 {
-	if (mode_Hayes < 0 || mode_Hayes > 1)
-	{
-		mode_Hayes = 0;
-	}
-
 	// DEBUG !!!! Always start in Menu mode for testing.
 	mode_Hayes = 0;
 

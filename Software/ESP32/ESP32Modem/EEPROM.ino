@@ -19,7 +19,7 @@ void restoreEEPROMSettings()
 	mode_Hayes = EEPROM.read(ADDR_HAYES_MENU);
 	BAUD_RATE = readEEPROMInteger(ADDR_BAUD_LO);
 
-	Debug.println(F("\nDEBUG: EPROM Settings Restored"));
+	Debug.println(F("DEBUG: EPROM Settings Restored"));
 }
 
 void updateEEPROMByte(int address, byte value)
